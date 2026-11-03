@@ -1,0 +1,39 @@
+<div class="page">
+  <app-site-header />
+
+  <main>
+    <aside>
+      <div class="eyebrow">{{ cv.title.toUpperCase() }} · {{ cv.country.toUpperCase() }}</div>
+      <h1>{{ firstName }}<br class="wide" /> {{ lastName }}</h1>
+      <p class="intro">{{ cv.intro }}</p>
+
+      <div class="chips-block">
+        <div class="chips-label" id="chips-label">Navigate by typing — or tap a command:</div>
+        <div class="chips" role="group" aria-labelledby="chips-label">
+          @for (command of quickCommands; track command) {
+            <button
+              type="button"
+              class="chip"
+              [class.active]="terminal.activeCommand() === command"
+              [attr.aria-pressed]="terminal.activeCommand() === command"
+              (click)="terminal.runFromUi(command)"
+            >
+              {{ command }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="plain-link">
+        <div class="muted">Not a terminal person?</div>
+        <a routerLink="/cv">Read the CV as a plain page →</a>
+      </div>
+    </aside>
+
+    <app-terminal />
+  </main>
+
+  <a class="plain-link-mobile" routerLink="/cv">Read the CV as a plain page →</a>
+
+  <app-site-footer />
+</div>

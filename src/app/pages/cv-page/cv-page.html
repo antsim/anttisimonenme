@@ -1,0 +1,129 @@
+<div class="page">
+  <app-site-header />
+
+  <main>
+    <a class="back" routerLink="/">← Back to the terminal</a>
+
+    <article>
+      <header class="cv-header">
+        <h1>{{ cv.name }}</h1>
+        <p class="meta">
+          {{ cv.title }} · {{ cv.location }} ·
+          <a [href]="'mailto:' + cv.email">{{ cv.email }}</a>
+        </p>
+      </header>
+
+      <section aria-labelledby="profile">
+        <h2 id="profile">Profile</h2>
+        <p><app-ph [text]="cv.profile" /></p>
+      </section>
+
+      <section aria-labelledby="about">
+        <h2 id="about">About</h2>
+        @for (paragraph of cv.about; track $index) {
+          <p><app-ph [text]="paragraph" /></p>
+        }
+      </section>
+
+      <section aria-labelledby="stack">
+        <h2 id="stack">Core stack</h2>
+        <ul class="tags">
+          @for (tag of cv.coreStack; track tag) {
+            <li [class.ph-tag]="isPlaceholder(tag)">{{ tag }}</li>
+          }
+        </ul>
+      </section>
+
+      <section aria-labelledby="experience">
+        <h2 id="experience">Experience</h2>
+        @for (employer of cv.experience; track employer.company) {
+          <div class="employer">
+            <h3>{{ employer.company }}</h3>
+            @for (role of employer.roles; track role.start) {
+              <div class="role">
+                <div class="role-head">
+                  <h4>{{ role.title }}</h4>
+                  <span class="dates">{{ period(role) }}</span>
+                </div>
+                <p class="muted">{{ role.location }}</p>
+                <p><app-ph [text]="role.summary" /></p>
+                <ul>
+                  @for (h of role.highlights; track $index) {
+                    <li><app-ph [text]="h" /></li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <section aria-labelledby="education">
+        <h2 id="education">Education</h2>
+        @for (ed of cv.education; track ed.degree) {
+          <div class="role">
+            <div class="role-head">
+              <h4>{{ ed.degree }}</h4>
+              <span class="dates">{{ ed.startYear }} – {{ ed.endYear }}</span>
+            </div>
+            <p>{{ ed.institution }} · {{ ed.field }}</p>
+            @if (ed.note) {
+              <p class="muted">{{ ed.note }}</p>
+            }
+          </div>
+        }
+      </section>
+
+      <section aria-labelledby="skills">
+        <h2 id="skills">Skills</h2>
+        <dl class="skills">
+          @for (group of cv.skills; track group.label) {
+            <dt>{{ group.label }}</dt>
+            <dd>
+              @for (item of group.items; track item; let last = $last) {
+                <app-ph [text]="item" />@if (!last) {, }
+              }
+            </dd>
+          }
+        </dl>
+      </section>
+
+      <section aria-labelledby="projects">
+        <h2 id="projects">Selected projects</h2>
+        @for (project of cv.projects; track $index) {
+          <div class="role">
+            <h4><app-ph [text]="project.name" /></h4>
+            <p><app-ph [text]="project.summary" /></p>
+            <p class="muted">{{ project.tags.join(' · ') }}</p>
+          </div>
+        }
+      </section>
+
+      <section aria-labelledby="more">
+        <h2 id="more">Certifications &amp; languages</h2>
+        <ul>
+          @for (cert of cv.certifications; track cert.name) {
+            <li>{{ cert.name }} — {{ cert.issuer }}, {{ cert.year }}</li>
+          }
+          @for (l of cv.languages; track l.language) {
+            <li>{{ l.language }} — {{ l.level }}</li>
+          }
+        </ul>
+      </section>
+
+      <section aria-labelledby="contact">
+        <h2 id="contact">Contact</h2>
+        <ul class="contact">
+          <li>Email: <a [href]="'mailto:' + cv.email">{{ cv.email }}</a></li>
+          <li>LinkedIn: <a [href]="cv.linkedinUrl" target="_blank" rel="noopener">{{ cv.linkedinUrl }}</a></li>
+          <li>
+            GitHub: <a [href]="cv.githubUrl" target="_blank" rel="noopener"><app-ph [text]="cv.githubUrl" /></a>
+          </li>
+          <li><a [href]="cv.pdfUrl" download>Download the CV as PDF</a></li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <app-site-footer />
+</div>

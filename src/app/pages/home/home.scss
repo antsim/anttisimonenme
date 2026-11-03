@@ -1,0 +1,194 @@
+// Desktop: the page fits the viewport; only the terminal scrolls.
+.page {
+  box-sizing: border-box;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 720px;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 36px 64px 32px;
+}
+
+main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 56px;
+}
+
+aside {
+  width: 400px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-top: 24px;
+}
+
+app-terminal {
+  flex: 1;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 76px;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+.intro {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.chips-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chips-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background-color 120ms,
+    border-color 120ms;
+
+  &:hover {
+    border-color: var(--ink);
+  }
+
+  &.active {
+    color: var(--page-bg);
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+}
+
+.plain-link {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+
+  a {
+    font-weight: 500;
+  }
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+
+.plain-link-mobile {
+  display: none;
+}
+
+// Narrower desktops and tablets in landscape
+@media (max-width: 1199px) and (min-width: 900px) {
+  .page {
+    padding: 32px 40px 28px;
+  }
+  main {
+    gap: 40px;
+  }
+  aside {
+    width: 320px;
+  }
+  h1 {
+    font-size: 60px;
+  }
+}
+
+// Phones and portrait tablets: single column, terminal fills the remaining height.
+@media (max-width: 899px) {
+  .page {
+    min-height: 560px;
+    gap: 20px;
+    padding: 20px 16px 16px;
+  }
+
+  main {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  aside {
+    width: auto;
+    gap: 8px;
+    padding-top: 0;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+  }
+
+  h1 {
+    font-size: 44px;
+    line-height: 1;
+  }
+
+  .wide {
+    display: none;
+  }
+
+  .intro,
+  .chips-block,
+  .plain-link,
+  app-site-footer {
+    display: none;
+  }
+
+  app-terminal {
+    min-height: 0;
+  }
+
+  .plain-link-mobile {
+    display: block;
+    padding: 4px 0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    transition: none;
+  }
+}

@@ -1,0 +1,223 @@
+@let e = entry();
+
+@if (e.input !== null) {
+  <div class="cmd-line"><app-prompt />{{ e.input }}</div>
+}
+
+@switch (e.kind) {
+  @case ('banner') {
+    <div class="block banner">
+      <div class="wide">
+        @if (lastLogin()) {
+          <div class="muted">Last login: {{ lastLogin() }} from web</div>
+          <div class="spacer"></div>
+        }
+        <div>Welcome to <span class="accent">anttisimonen.me</span> — portfolio of {{ cv.name }}, software architect.</div>
+        <div>
+          Type <button type="button" class="cmd" (click)="run('help')">help</button> for commands, or
+          <button type="button" class="cmd" (click)="run('cv')">cv</button> to go straight to the CV.
+        </div>
+      </div>
+      <div class="narrow">
+        Welcome. Type <button type="button" class="cmd" (click)="run('help')">help</button>, or tap a command below.
+      </div>
+    </div>
+  }
+
+  @case ('help') {
+    <div class="out">
+      <div class="title wide">AVAILABLE COMMANDS</div>
+      <div class="grid">
+        @for (c of commands; track c.name) {
+          <button type="button" class="cmd" (click)="run(c.name)">{{ c.name }}</button>
+          <span><span class="wide">{{ c.description }}</span><span class="narrow">{{ c.short }}</span></span>
+        }
+      </div>
+      <div class="muted hint wide">Tip: ↑/↓ history · Tab autocompletes · click any command to run it</div>
+    </div>
+  }
+
+  @case ('cv') {
+    <div class="out cv">
+      <div class="cv-name">{{ cv.name.toUpperCase() }}</div>
+      <div class="muted">{{ cv.title }} · {{ cv.country }} · {{ cv.email }}</div>
+      <div class="rule" aria-hidden="true">{{ rule }}</div>
+
+      <h2 class="h">## PROFILE</h2>
+      <p class="prose"><app-ph [text]="cv.profile" /></p>
+
+      <h2 class="h">## CORE STACK</h2>
+      <ul class="tags">
+        @for (tag of cv.coreStack; track tag) {
+          <li class="tag" [class.ph-tag]="isPlaceholder(tag)">{{ tag }}</li>
+        }
+      </ul>
+
+      <h2 class="h">## EXPERIENCE</h2>
+      <div class="grid rows">
+        @for (role of roles; track role.start) {
+          <span class="muted">{{ period(role) }}</span>
+          <div class="stack">
+            <span><span class="amber">{{ role.title }}</span> · {{ role.company }}</span>
+            <span class="muted"><app-ph [text]="role.summary" /></span>
+          </div>
+        }
+      </div>
+
+      <h2 class="h">## EDUCATION</h2>
+      <div class="grid rows">
+        @for (ed of cv.education; track ed.degree) {
+          <span class="muted">{{ ed.startYear }} – {{ ed.endYear }}</span>
+          <div class="stack">
+            <span>{{ ed.degree }} · {{ ed.institution }}</span>
+            <span class="muted">{{ ed.field }}</span>
+            @if (ed.note) {
+              <span class="muted">{{ ed.note }}</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="muted hint">
+        Page 1/2 ·
+        <button type="button" class="cmd plain" (click)="more()">Enter for more</button> ·
+        <button type="button" class="cmd" (click)="run('experience --full')">experience --full</button> ·
+        <button type="button" class="cmd" (click)="run('download cv')">download cv</button>
+      </div>
+    </div>
+  }
+
+  @case ('cv-more') {
+    <div class="out cv">
+      <h2 class="h">## CERTIFICATIONS</h2>
+      @for (cert of cv.certifications; track cert.name) {
+        <div>{{ cert.name }} <span class="muted">· {{ cert.issuer }} · {{ cert.year }}</span></div>
+      }
+
+      <h2 class="h">## LANGUAGES</h2>
+      <div class="grid">
+        @for (l of cv.languages; track l.language) {
+          <span>{{ l.language }}</span><span class="muted">{{ l.level }}</span>
+        }
+      </div>
+
+      <h2 class="h">## LINKS</h2>
+      <ng-container [ngTemplateOutlet]="contactGrid" />
+
+      <div class="muted hint">
+        Page 2/2 ·
+        <button type="button" class="cmd" (click)="run('experience --full')">experience --full</button> ·
+        <button type="button" class="cmd" (click)="run('projects')">projects</button> ·
+        <button type="button" class="cmd" (click)="run('download cv')">download cv</button>
+      </div>
+    </div>
+  }
+
+  @case ('whoami') {
+    <div class="out">
+      @for (paragraph of cv.about; track $index) {
+        <p class="prose"><app-ph [text]="paragraph" /></p>
+      }
+    </div>
+  }
+
+  @case ('experience') {
+    <div class="out">
+      <div class="grid rows">
+        @for (role of roles; track role.start) {
+          <span class="muted">{{ period(role) }}</span>
+          <div class="stack">
+            <span><span class="amber">{{ role.title }}</span> · {{ role.company }}</span>
+            <span class="muted"><app-ph [text]="role.summary" /></span>
+          </div>
+        }
+      </div>
+      <div class="muted hint">
+        Run <button type="button" class="cmd" (click)="run('experience --full')">experience --full</button> for details.
+      </div>
+    </div>
+  }
+
+  @case ('experience-full') {
+    <div class="out">
+      @for (employer of cv.experience; track employer.company) {
+        <h2 class="h">## {{ employer.company.toUpperCase() }}</h2>
+        @for (role of employer.roles; track role.start) {
+          <div class="role">
+            <div class="amber">{{ role.title }}</div>
+            <div class="muted">{{ period(role) }} · {{ role.location }}</div>
+            <div><app-ph [text]="role.summary" /></div>
+            <ul class="bullets">
+              @for (h of role.highlights; track $index) {
+                <li><app-ph [text]="h" /></li>
+              }
+            </ul>
+          </div>
+        }
+      }
+    </div>
+  }
+
+  @case ('skills') {
+    <div class="out">
+      <div class="grid rows">
+        @for (group of cv.skills; track group.label) {
+          <span class="amber">{{ group.label }}</span>
+          <ul class="tags">
+            @for (item of group.items; track item) {
+              <li class="tag" [class.ph-tag]="isPlaceholder(item)">{{ item }}</li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+  }
+
+  @case ('projects') {
+    <div class="out">
+      @for (project of cv.projects; track $index) {
+        <div class="role">
+          <div class="amber"><app-ph [text]="project.name" /></div>
+          <div><app-ph [text]="project.summary" /></div>
+          <div class="muted">{{ project.tags.join(' · ') }}</div>
+        </div>
+      }
+    </div>
+  }
+
+  @case ('contact') {
+    <div class="out">
+      <ng-container [ngTemplateOutlet]="contactGrid" />
+    </div>
+  }
+
+  @case ('download') {
+    <div class="out">
+      Downloading {{ pdfName }}… If nothing happens,
+      <a [href]="cv.pdfUrl" download>open the PDF</a>.
+    </div>
+  }
+
+  @case ('completions') {
+    <div class="out completions">
+      @for (item of e.items; track item) {
+        <button type="button" class="cmd" (click)="run(item)">{{ item }}</button>
+      }
+    </div>
+  }
+
+  @case ('not-found') {
+    <div class="out">
+      command not found: {{ e.input }}. Type <button type="button" class="cmd" (click)="run('help')">help</button> for
+      available commands.
+    </div>
+  }
+}
+
+<ng-template #contactGrid>
+  <div class="grid">
+    <span class="amber">email</span><a [href]="'mailto:' + cv.email">{{ cv.email }}</a>
+    <span class="amber">linkedin</span><a [href]="cv.linkedinUrl" target="_blank" rel="noopener">{{ strip(cv.linkedinUrl) }}</a>
+    <span class="amber">github</span><a [href]="cv.githubUrl" target="_blank" rel="noopener"><app-ph [text]="strip(cv.githubUrl)" /></a>
+  </div>
+</ng-template>

@@ -1,0 +1,65 @@
+<section class="window" aria-label="Terminal">
+  <div class="bar">
+    <span class="dots" aria-hidden="true"><span></span><span></span><span></span></span>
+    <div class="bar-title">guest&#64;anttisimonen.me: {{ terminal.windowTitle() }}</div>
+  </div>
+
+  <div class="body" #body (click)="onBodyClick($event)">
+    <div class="log" role="log" aria-live="polite" aria-label="Terminal output">
+      @for (entry of terminal.entries(); track entry.id) {
+        <app-terminal-output [entry]="entry" />
+      }
+    </div>
+
+    <div class="prompt-line">
+      <app-prompt />
+      <span class="input-wrap" [class.focused]="focused()">
+        <span class="mirror" aria-hidden="true"
+          >{{ beforeCaret() }}<span class="cursor">{{ underCaret() }}</span>{{ afterCaret() }}</span
+        >
+        <label class="sr-only" for="terminal-input">Command</label>
+        <input
+          #inlineInput
+          id="terminal-input"
+          class="inline-input"
+          type="text"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          [value]="value()"
+          (input)="onInput($event)"
+          (keydown)="onKeydown($event)"
+          (keyup)="syncCaret(inlineInput)"
+          (click)="syncCaret(inlineInput)"
+          (select)="syncCaret(inlineInput)"
+          (focus)="focused.set(true)"
+          (blur)="focused.set(false)"
+        />
+      </span>
+    </div>
+  </div>
+
+  <div class="mobile-controls">
+    <div class="quick">
+      @for (command of mobileCommands; track command) {
+        <button type="button" (click)="runQuick(command)">{{ command }}</button>
+      }
+    </div>
+    <div class="mobile-input">
+      <label class="sr-only" for="terminal-input-mobile">Command</label>
+      <input
+        #mobileInput
+        id="terminal-input-mobile"
+        type="text"
+        placeholder="Type a command…"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        enterkeyhint="go"
+        [value]="value()"
+        (input)="onInput($event)"
+        (keydown)="onKeydown($event)"
+      />
+    </div>
+  </div>
+</section>

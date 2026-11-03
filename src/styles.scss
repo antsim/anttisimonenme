@@ -1,0 +1,68 @@
+/* Design tokens — see DESIGN.md. Change --accent to re-theme the terminal (alternatives: #E8B35A, #8FB8DE). */
+:root {
+  --page-bg: #ece8df;
+  --ink: #1a1c19;
+  --ink-2: #3a3d37;
+  --ink-muted: #55594f;
+  --line: #c9c5b8;
+  --line-strong: #a7a597;
+  --link: #2f6b3a;
+  --link-hover: #1f4a27;
+
+  --term-bg: #121513;
+  --term-bar: #1d211e;
+  --term-line: #3a403b;
+  --term-text: #d6ddd3;
+  --term-muted: #8e988f;
+  --accent: #7ee081;
+  --amber: #e8b35a;
+  --blue: #8fb8de;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--page-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--link);
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: var(--link-hover);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,201 @@
+:host {
+  display: block;
+  margin-bottom: 18px;
+  --ph-color: var(--term-muted);
+}
+
+.cmd-line {
+  word-break: break-word;
+}
+
+.out {
+  margin-top: 8px;
+}
+
+.cv {
+  margin-top: 14px;
+}
+
+.spacer {
+  height: 18px;
+}
+
+.muted {
+  color: var(--term-muted);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.amber {
+  color: var(--amber);
+}
+
+.title {
+  font-weight: 600;
+}
+
+.hint {
+  margin-top: 12px;
+}
+
+.cv .hint {
+  margin-top: 16px;
+}
+
+.prose {
+  margin: 0;
+  max-width: 760px;
+
+  & + & {
+    margin-top: 10px;
+  }
+}
+
+// Clickable command names
+.cmd {
+  font: inherit;
+  color: var(--amber);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  text-underline-offset: 3px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &.plain {
+    color: inherit;
+  }
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  column-gap: 16px;
+  margin-top: 4px;
+  justify-items: start;
+
+  &.rows {
+    row-gap: 10px;
+  }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.cv-name {
+  color: var(--amber);
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+}
+
+.rule {
+  color: var(--term-line);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.h {
+  margin: 14px 0 0;
+  font: inherit;
+  color: var(--accent);
+}
+
+.cv .h:first-of-type {
+  margin-top: 10px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grid .tags {
+  margin-top: 0;
+}
+
+.tag {
+  border: 1px solid var(--term-line);
+  border-radius: 4px;
+  padding: 2px 10px;
+}
+
+.ph-tag {
+  border-style: dashed;
+  color: var(--term-muted);
+}
+
+.role {
+  margin-top: 10px;
+}
+
+.bullets {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li::before {
+    content: '- ';
+    color: var(--term-muted);
+  }
+}
+
+.completions {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 24px;
+}
+
+.narrow {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  :host {
+    margin-bottom: 12px;
+  }
+
+  .wide {
+    display: none;
+  }
+
+  .narrow {
+    display: inline;
+  }
+
+  div.narrow {
+    display: block;
+  }
+
+  .grid {
+    grid-template-columns: 112px minmax(0, 1fr);
+    column-gap: 8px;
+  }
+
+  .cv-name {
+    font-size: 17px;
+  }
+
+  // Mobile tap targets for commands inside output
+  .hint .cmd,
+  .completions .cmd {
+    min-height: 32px;
+  }
+}
